@@ -5,7 +5,7 @@ from api.domain.user_domain import UserDomain
 from api.serializers.user import UsuarioSerializer
 
 
-class UserService(GenericViewSet, mixins.CreateModelMixin):
+class UserView(GenericViewSet, mixins.CreateModelMixin):
     domain = UserDomain()
     
     queryset = domain.list()
