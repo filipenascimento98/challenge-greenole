@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+import logging
 
 
 class DomainBase:
@@ -10,6 +11,7 @@ class DomainBase:
             ret = self.repository.create(data)
             self.repository.save(ret)
         except Exception as e:
+            logging.error(e)
             return {"message": "Não foi possível adicionar o objeto a base de dados.", "status": 400}
         
         return {"message": ret.pk, "status": 201}
@@ -18,6 +20,7 @@ class DomainBase:
         try:
             ret = self.repository.list()
         except ObjectDoesNotExist as e:
+            logging.error(e)
             return {"message": "Objeto não encontrado", "status": 404}
         
         return {"message": ret, "status": 200}
@@ -26,6 +29,7 @@ class DomainBase:
         try:
             ret = self.repository.get(query_params=query_params)
         except ObjectDoesNotExist as e:
+            logging.error(e)
             return {"message": "Objeto não encontrado", "status": 404}
         
         return {"message": ret, "status": 200}
