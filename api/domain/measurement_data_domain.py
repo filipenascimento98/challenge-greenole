@@ -14,7 +14,7 @@ class MeasurementDataDomain(DomainBase):
     
     def _validate_data(self, value, time):
         if time == 'minute':
-            if value in range(0, 60):
+            if value in range(1, 61):
                 return True
         elif time == 'hour': 
             if value in range(1, 25):
