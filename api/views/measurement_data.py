@@ -10,6 +10,7 @@ from api.serializers.measurement_data import (
     MeasurementDataSerializer,
     ListMeasurementDataSerializer,
 )
+from api.task import create
 
 
 class MeasurementDataView(GenericViewSet, 
@@ -25,15 +26,12 @@ class MeasurementDataView(GenericViewSet,
 
         if serializer.is_valid(raise_exception=True):
             try:
-                ret = self.domain.create(serializer.data)
+                create.delay(serializer.data)
             except Exception as e:
                 return Response({
                     'message': 'An unexpected error occurred.'}, 
                     status=status.HTTP_412_PRECONDITION_FAILED
                 )
-        
-        if isinstance(ret, tuple):
-            return Response(ret[0], status=ret[1])
         
         return Response(status=status.HTTP_201_CREATED)
     
@@ -54,5 +52,5 @@ class MeasurementDataView(GenericViewSet,
         
         if isinstance(ret, tuple):
             return Response({'message': ret[0]}, status=ret[1])
-        print(ret)
+        
         return Response(ret, status=status.HTTP_200_OK)
