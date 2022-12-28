@@ -17,7 +17,7 @@ class MeasurementDataDomain(DomainBase):
             if value in range(0, 60):
                 return True
         elif time == 'hour': 
-            if value in range(0, 24):
+            if value in range(1, 25):
                 return True
         else:
             if value in range(1, 32):
@@ -79,12 +79,22 @@ class MeasurementDataDomain(DomainBase):
         
         try:
             measurements_data = self.repository.filter_by_created_at(datetime_to_search)
+            duplicate_measurements_data = self.duplicate_measurement_data_repository.filter_by_created_at(datetime_to_search)
         except Exception as e:
             logging.error(e)
             return ("Error querying the data in the database", 500)
         
         data = []
         for measurement_data in measurements_data:
+            data.append({
+                "id": measurement_data.id,
+                "sensor_id": measurement_data.sensor_id,
+                "measured_at": measurement_data.measured_at,
+                "value": measurement_data.value,
+                "created_at": measurement_data.created_at
+            })
+        
+        for measurement_data in duplicate_measurements_data:
             data.append({
                 "id": measurement_data.id,
                 "sensor_id": measurement_data.sensor_id,
