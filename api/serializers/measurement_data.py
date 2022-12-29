@@ -9,3 +9,7 @@ class MeasurementDataSerializer(serializers.Serializer):
 class ListMeasurementDataSerializer(serializers.Serializer):
     time = serializers.ChoiceField(choices=['minute', 'hour', 'day'])
     value = serializers.CharField(min_length=1, max_length=2)
+
+class ResponseListMeasurementDataSerializer(MeasurementDataSerializer):
+    id = serializers.UUIDField()
+    created_at = serializers.DateTimeField()

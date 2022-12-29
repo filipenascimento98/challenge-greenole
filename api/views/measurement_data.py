@@ -4,11 +4,13 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import status
+from drf_yasg.utils import swagger_auto_schema
 
 from api.domain.measurement_data_domain import MeasurementDataDomain
 from api.serializers.measurement_data import (
     MeasurementDataSerializer,
     ListMeasurementDataSerializer,
+    ResponseListMeasurementDataSerializer
 )
 from api.task import create
 
@@ -21,6 +23,12 @@ class MeasurementDataView(GenericViewSet,
 
     domain = MeasurementDataDomain()
 
+    @swagger_auto_schema(request_body= MeasurementDataSerializer(), 
+        responses={
+            201: "No content", 
+            406: "'Value must be positive integer'. or 'Incorrect input to parameter 'value'.'", 
+            500: "Error querying the data in the database"}
+    )
     def create(self, request, *args, **kwargs):
         serializer = MeasurementDataSerializer(data=request.data)
 
@@ -35,6 +43,7 @@ class MeasurementDataView(GenericViewSet,
         
         return Response(status=status.HTTP_201_CREATED)
     
+    @swagger_auto_schema(query_serializer=ListMeasurementDataSerializer(),responses={200: ResponseListMeasurementDataSerializer(many=True)})
     def list(self, request, *args, **kwargs):
         value = request.query_params.get('value', None)
         time = request.query_params.get('time', None)
