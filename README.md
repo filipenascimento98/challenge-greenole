@@ -20,8 +20,10 @@ git clone https://github.com/filipenascimento98/challenge-greenole.git
 ```
 
 # How to use
-This project depends on [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/). With the dependencies resolved, navigate to the project directory that contains the __docker_compose.yml__ file and run the following command that will build and deploy the application:
+This project depends on [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/). With the dependencies resolved, navigate to the project directory that contains the __docker_compose.yml__ file and run the following commands that will build and deploy the application:
 ```bash
+python manage.py makemigrations
+python manage.py migrate
 docker-compose up -d
 ```
 Thus, the application will run in a Docker container.
