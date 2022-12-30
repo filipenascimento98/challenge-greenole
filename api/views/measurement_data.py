@@ -26,7 +26,7 @@ class MeasurementDataView(GenericViewSet,
     @swagger_auto_schema(request_body= MeasurementDataSerializer(), 
         responses={
             201: "No content", 
-            406: "'Value must be positive integer'. or 'Incorrect input to parameter 'value'.'", 
+            400: "It was not possible to add the object to the database.", 
             500: "Error querying the data in the database"}
     )
     def create(self, request, *args, **kwargs):
@@ -43,7 +43,12 @@ class MeasurementDataView(GenericViewSet,
         
         return Response(status=status.HTTP_201_CREATED)
     
-    @swagger_auto_schema(query_serializer=ListMeasurementDataSerializer(),responses={200: ResponseListMeasurementDataSerializer(many=True)})
+    @swagger_auto_schema(query_serializer=ListMeasurementDataSerializer(),
+        responses={
+            200: ResponseListMeasurementDataSerializer(many=True),
+            406: "'Value must be positive integer'. or 'Incorrect input to parameter 'value'.'", 
+            500: "Error querying the data in the database"}
+    )
     def list(self, request, *args, **kwargs):
         value = request.query_params.get('value', None)
         time = request.query_params.get('time', None)
