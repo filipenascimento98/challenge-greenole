@@ -78,3 +78,14 @@ class MeasurementDataTest(TestCase):
         self.assertEqual(response_put.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
         self.assertEqual(response_patch.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
         self.assertEqual(response_delete.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+    
+    def test_with_invalid_body(self):
+        """
+        Tenta cadastrar um dado de medição com um body inválido
+        """
+        self.measurement_data = {'sensor': 7, 'measured': "2022-12-12 11:25:00", 'value': 147}
+        response = self.api_client.post(reverse('measurement-list'), self.measurement_data, format='json')
+
+        # Verifico:
+        # - Se o status é 400
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
